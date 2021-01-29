@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         netItemManager.serverHealthEvent.AddListener(OnServerHealthEvent);
-        netItemManager.CheckServerHealth();
+        netItemManager.GetServerHealth();
     }
 
     private void OnDestroy() {
@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void OnServerHealthEvent()
+    void OnServerHealthEvent(NetHealth health)
     {
         Debug.Log($"Server Health Change (status = {netItemManager.serverStatus})");
     }
