@@ -1,0 +1,19 @@
+{
+  "name": "ggj21-server",
+  "version": "1.0.0",
+  "description": "A server supporting the Global Game Jam 2021 entry",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tyler Stein",
+  "license": "ISC",
+  "dependencies": {
+    "bad-words": "^3.0.4",
+    "fastify": "^3.11.0",
+    "fastify-cors": "^5.2.0",
+    "fastify-rate-limit": "^5.0.1",
+    "superagent": "^6.1.0",
+    "uuid": "^8.3.2"
+  }
+}
