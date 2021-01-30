@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6158456865685034487}
-  - component: {fileID: 6158456865685034486}
+  - component: {fileID: 9028532068011459044}
   m_Layer: 0
   m_Name: VFXController
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6158456865685034486
+--- !u!114 &9028532068011459044
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,12 +40,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6158456865685034481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21563b4a6717eca418eac54cd3073a49, type: 3}
+  m_Script: {fileID: 11500000, guid: 89a9b223ab32de64596e3770643cfbba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dashParticlesPrefab: {fileID: 1470175800345392, guid: 502067d7c33a38c49a0a808f077a70af, type: 3}
   dashParticlesDuration: 1
-  bloodParticlesPrefab: {fileID: 1395712099863456, guid: 918347a131c946046bb26f54bb2f1e50, type: 3}
+  bloodParticlesPrefab: {fileID: 1609583310590790, guid: 86caadc364352d84c88277ee5ba76b30, type: 3}
   bloodParticlesDuration: 1
   impactParticlesPrefab: {fileID: 1520076681059474, guid: 8e8da9755084ee646aed3c776b299d04, type: 3}
   impactParticlesDuration: 1

@@ -1,42 +1,101 @@
 fileFormatVersion: 2
 guid: 0460dd725bec86b43865287b193ebfb0
-timeCreated: 1507992122
-licenseType: Store
 ModelImporter:
-  serializedVersion: 19
-  fileIDToRecycleName:
-    100000: Bone001
-    100002: Bone003
-    100004: Bone005
-    100006: Bone007
-    100008: Bone009_Mass
-    100010: Bone010
-    100012: Bone011_Head
-    100014: Circle001_Mass
-    100016: //RootNode
-    100018: Units_Mobs_GnollDog_01
-    400000: Bone001
-    400002: Bone003
-    400004: Bone005
-    400006: Bone007
-    400008: Bone009_Mass
-    400010: Bone010
-    400012: Bone011_Head
-    400014: Circle001_Mass
-    400016: //RootNode
-    400018: Units_Mobs_GnollDog_01
-    4300000: Units_Mobs_GnollDog_01
-    7400000: Mobs_GnollDog_Idle
-    7400002: Mobs_GnollDog_Walk
-    7400004: Mobs_GnollDog_Attack
-    7400006: Mobs_GnollDog_Death
-    9500000: //RootNode
-    11100000: //RootNode
-    13700000: Units_Mobs_GnollDog_01
+  serializedVersion: 20200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: Bone001
+  - first:
+      1: 100002
+    second: Bone003
+  - first:
+      1: 100004
+    second: Bone005
+  - first:
+      1: 100006
+    second: Bone007
+  - first:
+      1: 100008
+    second: Bone009_Mass
+  - first:
+      1: 100010
+    second: Bone010
+  - first:
+      1: 100012
+    second: Bone011_Head
+  - first:
+      1: 100014
+    second: Circle001_Mass
+  - first:
+      1: 100016
+    second: //RootNode
+  - first:
+      1: 100018
+    second: Units_Mobs_GnollDog_01
+  - first:
+      4: 400000
+    second: Bone001
+  - first:
+      4: 400002
+    second: Bone003
+  - first:
+      4: 400004
+    second: Bone005
+  - first:
+      4: 400006
+    second: Bone007
+  - first:
+      4: 400008
+    second: Bone009_Mass
+  - first:
+      4: 400010
+    second: Bone010
+  - first:
+      4: 400012
+    second: Bone011_Head
+  - first:
+      4: 400014
+    second: Circle001_Mass
+  - first:
+      4: 400016
+    second: //RootNode
+  - first:
+      4: 400018
+    second: Units_Mobs_GnollDog_01
+  - first:
+      43: 4300000
+    second: Units_Mobs_GnollDog_01
+  - first:
+      74: 7400000
+    second: Mobs_GnollDog_Idle
+  - first:
+      74: 7400002
+    second: Mobs_GnollDog_Walk
+  - first:
+      74: 7400004
+    second: Mobs_GnollDog_Attack
+  - first:
+      74: 7400006
+    second: Mobs_GnollDog_Death
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      111: 11100000
+    second: //RootNode
+  - first:
+      137: 13700000
+    second: Units_Mobs_GnollDog_01
+  - first:
+      74: -3498724409858869349
+    second: Mobs_GnollDog_Dead
+  externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
+    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -49,16 +108,20 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 1
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
       name: Mobs_GnollDog_Idle
       takeName: Take 001
+      internalID: 0
       firstFrame: 0
       lastFrame: 60
       wrapMode: 2
@@ -67,7 +130,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -107,6 +170,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Mobs_GnollDog_Walk
       takeName: Take 001
+      internalID: 0
       firstFrame: 100
       lastFrame: 130
       wrapMode: 2
@@ -115,7 +179,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -155,6 +219,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Mobs_GnollDog_Attack
       takeName: Take 001
+      internalID: 0
       firstFrame: 150
       lastFrame: 180
       wrapMode: 2
@@ -203,9 +268,59 @@ ModelImporter:
     - serializedVersion: 16
       name: Mobs_GnollDog_Death
       takeName: Take 001
+      internalID: 0
       firstFrame: 200
       lastFrame: 240
       wrapMode: 1
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Circle001_Mass
+        weight: 1
+      - path: Circle001_Mass/Bone009_Mass
+        weight: 1
+      - path: Circle001_Mass/Bone009_Mass/Bone001
+        weight: 1
+      - path: Circle001_Mass/Bone009_Mass/Bone003
+        weight: 1
+      - path: Circle001_Mass/Bone009_Mass/Bone005
+        weight: 1
+      - path: Circle001_Mass/Bone009_Mass/Bone007
+        weight: 1
+      - path: Circle001_Mass/Bone009_Mass/Bone010
+        weight: 1
+      - path: Circle001_Mass/Bone009_Mass/Bone010/Bone011_Head
+        weight: 1
+      - path: Units_Mobs_GnollDog_01
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Mobs_GnollDog_Dead
+      takeName: Take 001
+      internalID: 0
+      firstFrame: 239
+      lastFrame: 240
+      wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
@@ -254,26 +369,45 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 0
     importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -283,14 +417,17 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 1
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

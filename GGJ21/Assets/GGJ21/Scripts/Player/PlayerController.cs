@@ -13,19 +13,31 @@ namespace Player
         blocking,
         dodging,
         interact,
+        die,
     }
 
     [RequireComponent(typeof(PlayerMovementController))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : AttackHandler
     {
         public TwinStickCameraFollow cameraController;
         public CursorInput cursorInput;
         public PlayerMovementController playerMovementController;
-        public PlayerAnimator playerAnimator;
+        public CharacterAnimator playerAnimator;
         public VFXController vfxController;
         public PlayerColliderController colliderController;
+        public PlayerUIController uiController;
+        public Transform playerTransform { get => playerMovementController.transform; }
+
+        public float attackDistance = 1f;
+        public Transform attackOrigin;
+        public LayerMask attackLayerMask;
 
         public PlayerState state = PlayerState.idle;
+
+        public bool didDie = false;
+
+        public int maxHitPoints = 10;
+        public int hitPoints = 10;
 
         public bool canAttack = false;
         public bool canBlock = false;
@@ -37,6 +49,7 @@ namespace Player
         public float dodgeSpeed = 3f;
         public float dodgeDuration = 1.5f;
         public Vector3 dodgeDirection;
+        public float dodgeCooldown = 0.5f;
 
         public float blockSpeed = 1f;
 
@@ -45,6 +58,12 @@ namespace Player
 
         public float shakeMagnitude = 0.5f;
         public float shakeDuration = 0.05f;
+
+        public RaycastHit[] attackCastHits;
+
+        public void Awake() {
+            hitPoints = maxHitPoints;
+        }
 
         public void Update() {
             switch (state) {
@@ -66,29 +85,48 @@ namespace Player
                 case PlayerState.interact:
                     updateState_Interact();
                     break;
+                case PlayerState.die:
+                    updateState_Die();
+                    break;
             }
 
             playerAnimator.SetMoveDirection(playerMovementController.lastInputMoveDirection);
             playerAnimator.SetVelocity(playerMovementController.lastInputVelocity);
         }
 
+        public override void OnAttack(AttackSource source) {
+            if (state == PlayerState.blocking) {
+                // block attack
+                vfxController.PlayBlockImpact(source.hitLocation, Quaternion.LookRotation(source.hitNormal, Vector3.up));
+                cameraController.AddShake(shakeMagnitude, shakeDuration);
+            } else if (state != PlayerState.die) {
+                // take attack
+                hitPoints--;
+                uiController.OnHit();
+                vfxController.PlayBlood(source.hitLocation, Quaternion.LookRotation(source.hitNormal, Vector3.up));
+                cameraController.AddShake(shakeMagnitude, shakeDuration);
+            }
+        }
+
         public void updateState_Idle() {
             playerMovementController.Update_NormalMove(moveSpeed * Time.deltaTime);
 
-            if (cursorInput.Primary && canAttack) state = PlayerState.attacking;
+            if (hitPoints <= 0) state = PlayerState.die;
+            else if (cursorInput.Primary && canAttack) state = PlayerState.attacking;
             else if (cursorInput.InteractDown && canInteract) state = PlayerState.interact;
             else if (cursorInput.SecondaryDown && canBlock) state = PlayerState.blocking;
-            else if (cursorInput.ShiftDown && canDodge) state = PlayerState.dodging;
+            else if (cursorInput.ShiftDown && playerMovementController.lastInputVelocity > 0f) state = PlayerState.dodging;
             else if (playerMovementController.lastInputVelocity > 0f) state = PlayerState.moving;
         }
 
         public void updateState_Moving() {
             playerMovementController.Update_NormalMove(moveSpeed * Time.deltaTime);
 
-            if (cursorInput.Primary && canAttack) state = PlayerState.attacking;
+            if (hitPoints <= 0) state = PlayerState.die;
+            else if (cursorInput.Primary && canAttack) state = PlayerState.attacking;
             else if (cursorInput.InteractDown && canInteract) state = PlayerState.interact;
             else if (cursorInput.SecondaryDown && canBlock) state = PlayerState.blocking;
-            else if (cursorInput.ShiftDown && canDodge) state = PlayerState.dodging;
+            else if (cursorInput.ShiftDown && playerMovementController.lastInputVelocity > 0f) state = PlayerState.dodging;
             else if (playerMovementController.lastInputVelocity == 0f) state = PlayerState.idle;
         }
 
@@ -99,42 +137,30 @@ namespace Player
                 canBlock = false;
                 canDodge = false;
                 canInteract = false;
+                playerAnimator.TriggerAttack();
 
-                playerAnimator.SetIsAttacking(true);
-
-                GameObject target = colliderController.FirstAttackObject;
-                if (target != null) {
-                    Vector3 dir = target.transform.position - playerMovementController.playerTransform.position;
-                    Vector3 hitLocation = target.transform.position;
-                    Vector3 hitNormal = -dir;
-
-                    RaycastHit[] hits = Physics.RaycastAll(playerMovementController.playerTransform.position + Vector3.up * 1.5f, playerMovementController.transform.forward, 6f, 1 << 0);
-                    foreach (RaycastHit hit in hits) {
-                        if (hit.collider.gameObject == target) {
-                            hitLocation = hit.point;
-                            hitNormal = hit.normal;
-                        }
-                    }
-
+                // all but player
+                Debug.DrawRay(attackOrigin.position, attackOrigin.forward * attackDistance, Color.green, 1.0f);
+                attackCastHits = Physics.RaycastAll(attackOrigin.position, attackOrigin.forward, attackDistance, attackLayerMask);
+                if (attackCastHits.Length > 0) {
+                    GameObject target = attackCastHits[0].collider.gameObject;
                     AttackHandler handler = target.GetComponent<AttackHandler>();
-                    if (handler != null) {
+                    if (handler) {
                         handler.OnAttack(new AttackSource() {
                             other = gameObject,
-                            hitLocation = hitLocation,
-                            hitNormal = hitNormal,
+                            hitLocation = attackCastHits[0].point,
+                            hitNormal = attackCastHits[0].normal,
                         });
-
-                        vfxController.PlayBlood(hitLocation, Quaternion.LookRotation(-hitNormal, Vector3.up));
                     } else {
-                        vfxController.PlayMetalImpact(hitLocation, Quaternion.LookRotation(hitNormal, Vector3.up));
+                        vfxController.PlayMetalImpact(attackCastHits[0].point, Quaternion.LookRotation(attackCastHits[0].normal, Vector3.up));
                     }
 
                     cameraController.AddShake(shakeMagnitude, shakeDuration);
                 }
-
             }
 
             playerMovementController.Update_NormalMove(attackSpeed * Time.deltaTime);
+            if (hitPoints <= 0) state = PlayerState.die;
         }
 
         public void updateState_Blocking() {
@@ -145,8 +171,8 @@ namespace Player
                 canInteract = false;
 
                 playerAnimator.SetIsBlocking(true);
-                vfxController.PlayBlockImpact(playerMovementController.playerTransform.position + playerMovementController.playerTransform.forward * 0.75f + (Vector3.up * 1.5f), playerMovementController.playerTransform.rotation);
-                cameraController.AddShake(shakeMagnitude, shakeDuration);
+                //vfxController.PlayBlockImpact(playerMovementController.playerTransform.position + playerMovementController.playerTransform.forward * 0.75f + (Vector3.up * 1.5f), playerMovementController.playerTransform.rotation);
+                //cameraController.AddShake(shakeMagnitude, shakeDuration);
             }
 
             if (!cursorInput.Secondary) {
@@ -162,22 +188,24 @@ namespace Player
             }
 
             playerMovementController.Update_NormalMove(blockSpeed * Time.deltaTime);
+            if (hitPoints <= 0) state = PlayerState.die;
         }
 
         public void updateState_Dodging() {
             if (canDodge) {
                 dodgeDirection = playerMovementController.moveInput;
-                StartCoroutine(routine_Attack());
                 canAttack = false;
                 canBlock = false;
                 canDodge = false;
                 canInteract = false;
 
-                playerAnimator.SetIsDodging(true);
+                StartCoroutine(routine_Dodge());
+                playerAnimator.TriggerDodge();
                 vfxController.PlayDash(playerMovementController.playerTransform.position, Quaternion.LookRotation(-dodgeDirection, Vector3.up));
             }
 
             playerMovementController.Update_LockedMove(dodgeDirection, dodgeSpeed * Time.deltaTime);
+            if (hitPoints <= 0) state = PlayerState.die;
         }
 
         public void updateState_Interact() {
@@ -202,36 +230,44 @@ namespace Player
             canDodge = true;
             canInteract = true;
 
-            if (playerMovementController.lastInputVelocity > 0f) state = PlayerState.moving;
+            if (hitPoints <= 0) state = PlayerState.die;
+            else if (playerMovementController.lastInputVelocity > 0f) state = PlayerState.moving;
             else if (playerMovementController.lastInputVelocity == 0f) state = PlayerState.idle;
+        }
+
+        public void updateState_Die() {
+            if (!didDie) {
+                didDie = true;
+                playerAnimator.SetIsDead(true);
+            }
         }
 
         public IEnumerator routine_Attack() {
             yield return new WaitForSeconds(attackDuration);
+            if (state == PlayerState.attacking) {
+                canAttack = true;
+                canBlock = true;
+                canDodge = true;
+                canInteract = true;
 
-            canAttack = true;
-            canBlock = true;
-            canDodge = true;
-            canInteract = true;
-
-            if (playerMovementController.lastInputVelocity > 0f) state = PlayerState.moving;
-            else if (playerMovementController.lastInputVelocity == 0f) state = PlayerState.idle;
-
-            playerAnimator.SetIsAttacking(false);
+                if (playerMovementController.lastInputVelocity > 0f) state = PlayerState.moving;
+                else if (playerMovementController.lastInputVelocity == 0f) state = PlayerState.idle;
+            }
         }
 
         public IEnumerator routine_Dodge() {
             yield return new WaitForSeconds(dodgeDuration);
+            if (state == PlayerState.dodging) {
+                canAttack = true;
+                canBlock = true;
+                canInteract = true;
 
-            canAttack = true;
-            canBlock = true;
+                if (playerMovementController.lastInputVelocity > 0f) state = PlayerState.moving;
+                else if (playerMovementController.lastInputVelocity == 0f) state = PlayerState.idle;
+            }
+
+            yield return new WaitForSeconds(dodgeCooldown);
             canDodge = true;
-            canInteract = true;
-
-            if (playerMovementController.lastInputVelocity > 0f) state = PlayerState.moving;
-            else if (playerMovementController.lastInputVelocity == 0f) state = PlayerState.idle;
-
-            playerAnimator.SetIsDodging(false);
         }
     }
 }
