@@ -19,8 +19,14 @@ namespace Player
         private bool secondaryDown = false;
         public bool SecondaryDown { get { return secondaryDown; } }
 
-        private bool modifierDown = false;
-        public bool ModifierDown { get { return modifierDown; } }
+        private bool secondary = false;
+        public bool Secondary { get { return secondary; } }
+
+        private bool shiftDown = false;
+        public bool ShiftDown { get { return shiftDown; } }
+
+        private bool shift = false;
+        public bool Shift { get { return shift; } }
 
         private Vector3 cursorPosition = Vector3.zero;
         public Vector3 CursorPosition { get { return cursorPosition; } }
@@ -37,11 +43,15 @@ namespace Player
         [SerializeField] private string _modifierButtonName = "Shift";
 
         private void Update() {
-            cursorPosition = UnityEngine.Input.mousePosition;
-            primaryDown = UnityEngine.Input.GetButtonDown(_primaryButtonName);
-            primary = UnityEngine.Input.GetButton(_primaryButtonName);
-            secondaryDown = UnityEngine.Input.GetButtonDown(_secondaryButtonName);
-            modifierDown = UnityEngine.Input.GetButtonDown(_modifierButtonName);
+            cursorPosition = Input.mousePosition;
+            primaryDown = Input.GetButtonDown(_primaryButtonName);
+            primary = Input.GetButton(_primaryButtonName);
+
+            secondaryDown = Input.GetButtonDown(_secondaryButtonName);
+            secondary = Input.GetButton(_secondaryButtonName);
+
+            shiftDown = Input.GetButtonDown(_modifierButtonName);
+            shift = Input.GetButton(_modifierButtonName);
 
             //RaycastHit hit;
             //lastCursorWorldPositionValid = cursorCameraInput.Raycast(out hit);
