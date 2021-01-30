@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 namespace Player
 {
@@ -8,9 +9,12 @@ namespace Player
         public float followSpeed = 1f;
         public float rotationSpeed = 1f;
 
-        public Vector3 shakeForce = Vector3.zero;
-
         public Transform followTarget = null;
+
+        public float shakeReturnSpeed = 1f;
+        private float shakeForce = 0;
+        private float shakeTimer = 0f;
+        private Vector3 shakeOffset = Vector3.zero;
 
         // Start is called before the first frame update
         void Start() {
@@ -30,13 +34,32 @@ namespace Player
             Vector3 actualPosition = Vector3.Lerp(transform.position, desiredPosition, followSpeed * Time.deltaTime);
             Quaternion actualRotation = Quaternion.Lerp(transform.rotation, desiredRotation, rotationSpeed * Time.deltaTime);
 
-            shakeForce.Set(0, 0, 0);
+            if (shakeTimer > 0f) {
+                actualPosition -= shakeOffset;
+                shakeOffset = Random.insideUnitSphere * shakeForce;
+                shakeTimer -= Time.deltaTime;
+                if (shakeTimer < 0f) ClearShake();
+            } else {
+                shakeOffset = Vector3.Lerp(shakeOffset, Vector3.zero, Time.deltaTime * shakeReturnSpeed);
+            }
 
             transform.SetPositionAndRotation(actualPosition, actualRotation);
         }
 
-        public void Shake(float radius = 0.2f) {
-            shakeForce += Random.insideUnitSphere * radius;
+        public void ClearShake() {
+            shakeForce = 0f;
+            shakeTimer = 0f;
+        }
+
+        public void SetShate(float magnitude = 0.2f, float duration = 0.1f) {
+            shakeTimer = duration;
+            shakeForce = magnitude;
+        }
+
+        public void AddShake(float magnitude = 0.2f, float duration = 0.1f) {
+            shakeTimer += duration;
+            shakeForce += magnitude;
+
         }
     }
 }

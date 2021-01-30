@@ -28,6 +28,12 @@ namespace Player
         private bool shift = false;
         public bool Shift { get { return shift; } }
 
+        private bool interactDown = false;
+        public bool InteractDown { get { return interactDown; } }
+
+        private bool interact = false;
+        public bool Interact { get { return interact; } }
+
         private Vector3 cursorPosition = Vector3.zero;
         public Vector3 CursorPosition { get { return cursorPosition; } }
 
@@ -40,7 +46,8 @@ namespace Player
         [SerializeField] private bool _debugMode = false;
         [SerializeField] private string _primaryButtonName = "Primary";
         [SerializeField] private string _secondaryButtonName = "Secondary";
-        [SerializeField] private string _modifierButtonName = "Shift";
+        [SerializeField] private string _shiftButtonName = "Shift";
+        [SerializeField] private string _interactButtonName = "Jump";
 
         private void Update() {
             cursorPosition = Input.mousePosition;
@@ -50,18 +57,18 @@ namespace Player
             secondaryDown = Input.GetButtonDown(_secondaryButtonName);
             secondary = Input.GetButton(_secondaryButtonName);
 
-            shiftDown = Input.GetButtonDown(_modifierButtonName);
-            shift = Input.GetButton(_modifierButtonName);
+            shiftDown = Input.GetButtonDown(_shiftButtonName);
+            shift = Input.GetButton(_shiftButtonName);
+
+            interactDown = Input.GetButtonDown(_interactButtonName);
+            interact = Input.GetButton(_interactButtonName);
+
 
             //RaycastHit hit;
-            //lastCursorWorldPositionValid = cursorCameraInput.Raycast(out hit);
-            //cursorWorldPosition = hit.point;
-
-            RaycastHit hit;
-            bool didHit = cursorCameraInput.Raycast(out hit);
-            if (didHit) {
-                cursorWorldPosition = hit.point;
-            } else {
+            //bool didHit = cursorCameraInput.Raycast(out hit);
+            //if (didHit) {
+            //    cursorWorldPosition = hit.point;
+            //} else {
                 Vector3 point = Vector3.zero;
                 Plane plane = new Plane(cursorPlaneSource.up, cursorPlaneSource.transform.position + cursorPlaneSource.transform.forward);
                 if (cursorCameraInput.CastToPlane(plane, out point)) {
@@ -69,7 +76,7 @@ namespace Player
                 } else {
                     Debug.Log("Cursor Input Cast Hit Nothing");
                 }
-            }
+            //}
 
         }
 

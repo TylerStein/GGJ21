@@ -15,14 +15,27 @@ namespace Player
 
         public float maxLookDistance = 4.0f;
 
-        public Vector2 lastMoveDirection;
-        public float lastVelocity = 1.0f;
+        public Vector3 lastPhysicsPosition;
+        public Vector3 lastPhysicsDirection;
+        public float lastPhysicsVelocity = 0f;
+
+        public Vector2 lastInputMoveDirection;
+        public float lastInputVelocity = 0f;
 
         public Vector3 lookPoint;
         public Vector3 moveInput;
 
+        public void Start() {
+            lastPhysicsPosition = playerTransform.position;
+        }
+
         public void Update() {
             moveInput = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+            Vector3 move = playerTransform.position - lastPhysicsPosition;
+            lastPhysicsVelocity = move.magnitude;
+            lastPhysicsDirection = move.normalized;
+            lastPhysicsPosition = playerTransform.position;
         }
 
         public void Update_NormalMove(float speed) {
@@ -35,6 +48,11 @@ namespace Player
         }
 
         public void Update_LockedMove(Vector3 direction, float speed) {
+            lookPoint = transform.position + direction;
+            lookPoint.y = playerTransform.position.y;
+
+            playerTransform.LookAt(lookPoint, Vector3.up);
+
             ApplyRelativeMove(direction, speed);
         }
 
@@ -53,8 +71,8 @@ namespace Player
             Vector3 relativeMove = ((relativeForward * move.z) + (relativeRight * move.x)) * speed;
             Vector3 gravity = Physics.gravity * Time.deltaTime;
 
-            lastMoveDirection = relativeMove;
-            lastVelocity = relativeMove.magnitude;
+            lastInputMoveDirection = relativeMove;
+            lastInputVelocity = relativeMove.magnitude;
 
             character.Move(relativeMove + gravity);
 
