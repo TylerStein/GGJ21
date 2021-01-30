@@ -167,9 +167,11 @@ fastify.get('/meta/totals', metaTotalsSchema, async (req, reply) => {
     }
 });
 
+const port = process.env.PORT || 8080;
 const start = async () => {
     try {
-        await fastify.listen(3000);
+        await fastify.listen(port);
+        console.log('App listening on ' + port);
     } catch (error) {
         fastify.log.error(err);
         process.exit(1);
