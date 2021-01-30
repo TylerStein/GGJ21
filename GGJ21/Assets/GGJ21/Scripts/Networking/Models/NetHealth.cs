@@ -5,9 +5,11 @@ using UnityEngine;
 [System.Serializable]
 public class NetHealth
 {
-    [SerializeField] public long status;
+    [SerializeField] public string status;
+    [SerializeField] public long code;
 
-    public NetHealth(long status) {
+    public NetHealth(string status, long code) {
         this.status = status;
+        this.code = code;
     }
 }

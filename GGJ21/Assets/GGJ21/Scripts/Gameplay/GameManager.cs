@@ -5,12 +5,13 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public NetItemManager netItemManager;
+    public bool connectOnStart = false;
 
     // Start is called before the first frame update
     void Start()
     {
         netItemManager.serverHealthEvent.AddListener(OnServerHealthEvent);
-        netItemManager.GetServerHealth();
+        if (connectOnStart) netItemManager.GetServerHealth();
     }
 
     private void OnDestroy() {

@@ -4,7 +4,8 @@
   "description": "A server supporting the Global Game Jam 2021 entry",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index"
   },
   "author": "Tyler Stein",
   "license": "ISC",

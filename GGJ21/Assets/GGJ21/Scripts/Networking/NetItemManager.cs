@@ -57,7 +57,10 @@ public class NetItemManager : MonoBehaviour
         using (UnityWebRequest webRequest = UnityWebRequest.Get(serverAddress)) {
             yield return webRequest.SendWebRequest();
             NetHealth value = handleWebRequest<NetHealth>(webRequest);
-            if (value != null) setServerHealth(value);
+            if (value != null) {
+                value.code = webRequest.responseCode;
+                setServerHealth(value);
+            }
         }
     }
 
@@ -80,14 +83,13 @@ public class NetItemManager : MonoBehaviour
 
     private void handleEmptyWebRequest(UnityWebRequest req) {
         if (req.result == UnityWebRequest.Result.ConnectionError) {
-            setServerHealth(new NetHealth(serverStatus));
+            setServerHealth(new NetHealth(req.error, req.responseCode));
         }
     }
 
     private T handleWebRequest<T>(UnityWebRequest req) where T : class {
-        serverStatus = req.responseCode;
         if (req.result == UnityWebRequest.Result.ConnectionError) {
-            setServerHealth(new NetHealth(serverStatus));
+            setServerHealth(new NetHealth(req.error, req.responseCode));
             return null;
         } else {
             string bodyText = req.downloadHandler.text;
