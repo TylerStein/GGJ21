@@ -1278,11 +1278,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4066774466291611088, guid: 108bcab1a0c82a848969615d2c1f7df9, type: 3}
       propertyPath: hitPoints
-      value: 2
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4066774466291611088, guid: 108bcab1a0c82a848969615d2c1f7df9, type: 3}
       propertyPath: maxHitPoints
-      value: 2
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5240141574431682292, guid: 108bcab1a0c82a848969615d2c1f7df9, type: 3}
       propertyPath: m_AnchorMax.y

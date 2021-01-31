@@ -109,8 +109,8 @@ MonoBehaviour:
   attackPreTime: 0.35
   attackPostTime: 1.2
   attackRangeRotateSpeed: 600
-  maxHitPoints: 10
-  hitPoints: 10
+  maxHitPoints: 4
+  hitPoints: 4
   canAttack: 1
   didDie: 0
   distanceToPlayer: Infinity
