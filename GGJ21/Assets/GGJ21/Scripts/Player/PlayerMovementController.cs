@@ -7,7 +7,7 @@ namespace Player
         public bool debugMove = false;
 
         public CharacterController character;
-        public CursorInput cursorInput;
+        public PlayerInput cursorInput;
         public Transform playerTransform;
         public Transform moveRelativeTo;
         public Transform aimCameraTarget;

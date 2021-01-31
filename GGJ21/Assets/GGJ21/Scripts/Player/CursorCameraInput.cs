@@ -26,9 +26,9 @@ namespace Player
         }
 
         void Update() {
-            lastScreenMousePosition = UnityEngine.Input.mousePosition;
+            lastScreenMousePosition = Input.mousePosition;
 
-            lastWorldMouse = inputCamera.ScreenToWorldPoint(UnityEngine.Input.mousePosition + new Vector3(0, 0, worldMouseDistance));
+            lastWorldMouse = inputCamera.ScreenToWorldPoint(lastScreenMousePosition + new Vector3(0, 0, worldMouseDistance));
             mouseForward = (lastWorldMouse - _cameraTransform.position).normalized;
         }
 

@@ -21,7 +21,7 @@ namespace Player
     {
         public GameManager gameManager;
         public TwinStickCameraFollow cameraController;
-        public CursorInput cursorInput;
+        public PlayerInput cursorInput;
         public PlayerMovementController playerMovementController;
         public CharacterAnimator playerAnimator;
         public VFXController vfxController;
@@ -150,7 +150,7 @@ namespace Player
             playerMovementController.Update_NormalMove(moveSpeed * Time.deltaTime);
 
             if (hitPoints <= 0) state = PlayerState.die;
-            else if (cursorInput.Primary && canAttack) state = PlayerState.attacking;
+            else if (cursorInput.PrimaryDown && canAttack) state = PlayerState.attacking;
             else if (cursorInput.InteractDown && canInteract) state = PlayerState.interact;
             else if (cursorInput.SecondaryDown && canBlock) state = PlayerState.blocking;
             else if (cursorInput.ShiftDown && playerMovementController.lastInputVelocity > 0f) state = PlayerState.dodging;
@@ -161,7 +161,7 @@ namespace Player
             playerMovementController.Update_NormalMove(moveSpeed * Time.deltaTime);
 
             if (hitPoints <= 0) state = PlayerState.die;
-            else if (cursorInput.Primary && canAttack) state = PlayerState.attacking;
+            else if (cursorInput.PrimaryDown && canAttack) state = PlayerState.attacking;
             else if (cursorInput.InteractDown && canInteract) state = PlayerState.interact;
             else if (cursorInput.SecondaryDown && canBlock) state = PlayerState.blocking;
             else if (cursorInput.ShiftDown && playerMovementController.lastInputVelocity > 0f) state = PlayerState.dodging;
