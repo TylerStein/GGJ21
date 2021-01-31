@@ -16,6 +16,7 @@ public enum EnemyState
 [RequireComponent(typeof(CharacterAnimator))]
 public class MobController : AttackHandler
 {
+    public GameMusicManager musicManager;
     public GameManager gameManager;
     public VFXController vfxController;
     public PlayerController playerController;
@@ -43,6 +44,8 @@ public class MobController : AttackHandler
     public bool canAttack = true;
     public bool didDie = false;
 
+    public bool isAggro = false;
+
     public float distanceToPlayer = Mathf.Infinity;
     public RaycastHit[] attackCastHits;
     public LayerMask attackLayerMask;
@@ -58,6 +61,7 @@ public class MobController : AttackHandler
     // Start is called before the first frame update
     void Start()
     {
+        musicManager = FindObjectOfType<GameMusicManager>();
         vfxController = FindObjectOfType<VFXController>();
         playerController = FindObjectOfType<PlayerController>();
         gameManager = FindObjectOfType<GameManager>();
@@ -120,11 +124,21 @@ public class MobController : AttackHandler
     }
 
     void updateState_Idle() {
+        if (isAggro) {
+            isAggro = false;
+            musicManager.RemoveAggroMob();
+        }
+
         if (hitPoints <= 0) state = EnemyState.die;
         else if (distanceToPlayer < aggroDistance) state = EnemyState.aggro;
     }
 
     void updateState_Aggro() {
+        if (isAggro == false) {
+            musicManager.AddAggroMob();
+            isAggro = true;
+        }
+
         if (hitPoints <= 0) state = EnemyState.die;
         else if (playerController.state != PlayerState.die) {
             if (distanceToPlayer > giveUpDistance) state = EnemyState.idle;
@@ -141,6 +155,11 @@ public class MobController : AttackHandler
     }
 
     void updateState_Attack() {
+        if (isAggro == false) {
+            musicManager.AddAggroMob();
+            isAggro = true;
+        }
+
         if (canAttack) {
             canAttack = false;
 
@@ -164,6 +183,11 @@ public class MobController : AttackHandler
     void updateState_Die() {
 
         if (!didDie) {
+            if (isAggro) {
+                isAggro = false;
+                musicManager.RemoveAggroMob();
+            }
+
             didDie = true;
             agent.velocity = Vector3.zero;
             agent.enabled = false;

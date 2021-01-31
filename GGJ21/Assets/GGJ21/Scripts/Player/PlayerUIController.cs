@@ -10,6 +10,8 @@ public class PlayerUIController : MonoBehaviour
     public UIInteractView interactView;
     public UIPauseMenu pauseMenu;
 
+    public CanvasGroup postGameMessageGroup;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,5 +34,13 @@ public class PlayerUIController : MonoBehaviour
     public void SetPaused(bool paused) {
         if (paused) pauseMenu.ShowUI();
         else pauseMenu.HideUI();
+    }
+
+    public void ShowPostGameMessage() {
+        postGameMessageGroup.alpha = 1f;
+    }
+
+    public void HidePostGameMessage() {
+        postGameMessageGroup.alpha = 0f;
     }
 }

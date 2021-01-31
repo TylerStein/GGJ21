@@ -28,6 +28,7 @@ public class Chest : InteractionHandler
         chestAnimator.SetBool("isOpen", true);
         StartCoroutine(routine_OpenFX());
         playerController.hasTreasure = true;
+        playerController.uiController.ShowPostGameMessage();
         disableInteractionEvent.Invoke(gameObject);
     }
 
