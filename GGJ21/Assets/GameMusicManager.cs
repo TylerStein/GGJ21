@@ -21,9 +21,6 @@ public class GameMusicManager : MonoBehaviour
             calmAudioSource.mute = muted;
             combatAudioSource.mute = muted;
         });
-
-        calmAudioSource.volume = 0f;
-        combatAudioSource.volume = 1f;
     }
 
     void Update() {
