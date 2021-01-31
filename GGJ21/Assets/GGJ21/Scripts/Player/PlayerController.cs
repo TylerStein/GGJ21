@@ -19,6 +19,7 @@ namespace Player
     [RequireComponent(typeof(PlayerMovementController))]
     public class PlayerController : AttackHandler
     {
+        public GameManager gameManager;
         public TwinStickCameraFollow cameraController;
         public CursorInput cursorInput;
         public PlayerMovementController playerMovementController;
@@ -27,6 +28,7 @@ namespace Player
         public PlayerInteractionController interactionController;
         public PlayerUIController uiController;
         public CollisionEventSource interactionEventSource;
+        public CharacterAudio characterAudio;
         public Transform playerTransform { get => playerMovementController.transform; }
 
         public float attackDistance = 1f;
@@ -54,24 +56,50 @@ namespace Player
 
         public float blockSpeed = 1f;
 
-        public float attackSpeed = 0.25f;
-        public float attackDuration = 0.25f;
+        public float attackCooldown = 0.5f;
+        public float attackPreTime = 0.25f;
+        public float attackPostTime = 0.25f;
 
         public float shakeMagnitude = 0.5f;
         public float shakeDuration = 0.05f;
 
         public RaycastHit[] attackCastHits;
 
+        public bool isPaused;
+
+        public bool hasTreasure;
+
         public void Start() {
+            gameManager = FindObjectOfType<GameManager>();
+            gameManager.pausedEvent.AddListener(OnPauseChange);
             hitPoints = maxHitPoints;
             interactionController.interactionHandlerEvent.AddListener(changeActiveInteraction);
         }
 
         public void OnDestroy() {
             interactionController.interactionHandlerEvent.RemoveListener(changeActiveInteraction);
+            gameManager.pausedEvent.RemoveListener(OnPauseChange);
+        }
+
+        public void OnPauseChange(bool paused) {
+            if (paused) {
+                playerAnimator.PauseAll();
+
+            } else {
+                playerAnimator.ResumeAll();
+            }
+
+            isPaused = paused;
+            uiController.SetPaused(isPaused);
         }
 
         public void Update() {
+            if (cursorInput.PauseDown) {
+                gameManager.TogglePause();
+            }
+
+            if (isPaused) return;
+
             switch (state) {
                 case PlayerState.idle:
                     updateState_Idle();
@@ -97,7 +125,7 @@ namespace Player
             }
 
             playerAnimator.SetMoveDirection(playerMovementController.lastInputMoveDirection);
-            playerAnimator.SetVelocity(playerMovementController.lastInputVelocity);
+            playerAnimator.SetVelocity(playerMovementController.lastInputVelocity * 100);
         }
 
         public override void OnAttack(AttackSource source) {
@@ -105,12 +133,14 @@ namespace Player
                 // block attack
                 vfxController.PlayBlockImpact(source.hitLocation, Quaternion.LookRotation(source.hitNormal, Vector3.up));
                 cameraController.AddShake(shakeMagnitude, shakeDuration);
+                characterAudio.OnMetalImpact();
             } else if (state != PlayerState.die) {
                 // take attack
                 hitPoints--;
                 uiController.OnHit();
                 vfxController.PlayBlood(source.hitLocation, Quaternion.LookRotation(source.hitNormal, Vector3.up));
                 cameraController.AddShake(shakeMagnitude, shakeDuration);
+                if (hitPoints > 0) characterAudio.OnPain();
             }
         }
 
@@ -144,28 +174,9 @@ namespace Player
                 canDodge = false;
                 canInteract = false;
                 playerAnimator.TriggerAttack();
-
-                // all but player
-                Debug.DrawRay(attackOrigin.position, attackOrigin.forward * attackDistance, Color.green, 1.0f);
-                attackCastHits = Physics.RaycastAll(attackOrigin.position, attackOrigin.forward, attackDistance, attackLayerMask);
-                if (attackCastHits.Length > 0) {
-                    GameObject target = attackCastHits[0].collider.gameObject;
-                    AttackHandler handler = target.GetComponent<AttackHandler>();
-                    if (handler) {
-                        handler.OnAttack(new AttackSource() {
-                            other = gameObject,
-                            hitLocation = attackCastHits[0].point,
-                            hitNormal = attackCastHits[0].normal,
-                        });
-                    } else {
-                        vfxController.PlayMetalImpact(attackCastHits[0].point, Quaternion.LookRotation(attackCastHits[0].normal, Vector3.up));
-                    }
-
-                    cameraController.AddShake(shakeMagnitude, shakeDuration);
-                }
             }
 
-            playerMovementController.Update_NormalMove(attackSpeed * Time.deltaTime);
+            playerMovementController.Update_NormalMove(blockSpeed * Time.deltaTime);
             if (hitPoints <= 0) state = PlayerState.die;
         }
 
@@ -204,7 +215,7 @@ namespace Player
                 canInteract = false;
 
                 StartCoroutine(routine_Dodge());
-                playerAnimator.TriggerDodge();
+                playerAnimator.SetIsDodging(true);
                 vfxController.PlayDash(playerMovementController.playerTransform.position, Quaternion.LookRotation(-dodgeDirection, Vector3.up));
             }
 
@@ -241,13 +252,36 @@ namespace Player
             if (!didDie) {
                 didDie = true;
                 playerAnimator.SetIsDead(true);
+                characterAudio.OnDeath();
             }
         }
 
         public IEnumerator routine_Attack() {
-            yield return new WaitForSeconds(attackDuration);
+            yield return new WaitForSeconds(attackPreTime);
+
+            // all but player
+            Debug.DrawRay(attackOrigin.position, attackOrigin.forward * attackDistance, Color.green, 1.0f);
+            attackCastHits = Physics.RaycastAll(attackOrigin.position, attackOrigin.forward, attackDistance, attackLayerMask);
+            if (attackCastHits.Length > 0) {
+                GameObject target = attackCastHits[0].collider.gameObject;
+                AttackHandler handler = target.GetComponent<AttackHandler>();
+                if (handler) {
+                    handler.OnAttack(new AttackSource() {
+                        other = gameObject,
+                        hitLocation = attackCastHits[0].point,
+                        hitNormal = attackCastHits[0].normal,
+                    });
+                } else {
+                    characterAudio.OnMetalImpact();
+                    vfxController.PlayMetalImpact(attackCastHits[0].point, Quaternion.LookRotation(attackCastHits[0].normal, Vector3.up));
+                }
+
+                cameraController.AddShake(shakeMagnitude, shakeDuration);
+            }
+
+            yield return new WaitForSeconds(attackPostTime);
+
             if (state == PlayerState.attacking) {
-                canAttack = true;
                 canBlock = true;
                 canDodge = true;
                 canInteract = true;
@@ -255,6 +289,10 @@ namespace Player
                 if (playerMovementController.lastInputVelocity > 0f) state = PlayerState.moving;
                 else if (playerMovementController.lastInputVelocity == 0f) state = PlayerState.idle;
             }
+
+            yield return new WaitForSeconds(attackCooldown);
+
+            canAttack = true;
         }
 
         public IEnumerator routine_Dodge() {
@@ -263,6 +301,8 @@ namespace Player
                 canAttack = true;
                 canBlock = true;
                 canInteract = true;
+
+                playerAnimator.SetIsDodging(false);
 
                 if (playerMovementController.lastInputVelocity > 0f) state = PlayerState.moving;
                 else if (playerMovementController.lastInputVelocity == 0f) state = PlayerState.idle;

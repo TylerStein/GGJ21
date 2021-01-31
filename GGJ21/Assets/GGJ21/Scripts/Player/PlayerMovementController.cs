@@ -51,7 +51,8 @@ namespace Player
             lookPoint = transform.position + direction;
             lookPoint.y = playerTransform.position.y;
 
-            playerTransform.LookAt(direction, Vector3.up);
+            playerTransform.LookAt(lookPoint, Vector3.up);
+            // playerTransform.forward = direction;
 
             ApplyRelativeMove(direction, speed);
         }

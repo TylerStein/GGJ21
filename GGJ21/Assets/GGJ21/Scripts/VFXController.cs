@@ -16,6 +16,9 @@ public class VFXController : MonoBehaviour
     public GameObject blockParticlesPrefab;
     public float blockParticlesDuration = 1f;
 
+    public GameObject coinParticlesPrefab;
+    public float coinParticlesDuration = 1f;
+
     public void PlayDash(Vector3 position, Quaternion rotation) {
         SpawnEmitter(dashParticlesPrefab, position, rotation, dashParticlesDuration);
     }
@@ -30,6 +33,10 @@ public class VFXController : MonoBehaviour
 
     public void PlayBlockImpact(Vector3 position, Quaternion rotation) {
         SpawnEmitter(blockParticlesPrefab, position, rotation, blockParticlesDuration);
+    }
+
+    public void PlayCoinExplosion(Vector3 position, Quaternion rotation) {
+        SpawnEmitter(coinParticlesPrefab, position, rotation, coinParticlesDuration);
     }
 
     public void SpawnEmitter(GameObject prefab, Vector3 position, Quaternion rotation, float duration) {

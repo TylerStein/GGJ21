@@ -16,12 +16,14 @@ public enum EnemyState
 [RequireComponent(typeof(CharacterAnimator))]
 public class MobController : AttackHandler
 {
+    public GameManager gameManager;
     public VFXController vfxController;
     public PlayerController playerController;
     public NavMeshAgent agent;
     public CharacterAnimator mobAnimator;
     public MobUIController uiController;
     public Collider mobCollider;
+    public CharacterAudio characterAudio;
 
     public EnemyState state = EnemyState.idle;
 
@@ -46,17 +48,30 @@ public class MobController : AttackHandler
     public LayerMask attackLayerMask;
     public Transform attackOrigin;
 
+    public bool isPaused;
+    public Vector3 lastAgentVelocity;
+
+    public float sinkDelay = 2.5f;
+    public float sinkYTarget = -5f;
+    public float sinkYSpeed = 1f;
+
     // Start is called before the first frame update
     void Start()
     {
         vfxController = FindObjectOfType<VFXController>();
         playerController = FindObjectOfType<PlayerController>();
+        gameManager = FindObjectOfType<GameManager>();
+        gameManager.pausedEvent.AddListener(OnPauseChange);
         hitPoints = maxHitPoints;
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
+        if (isPaused) {
+            if (agent.enabled) agent.isStopped = true;
+            return;
+        }
+
         distanceToPlayer = Vector3.Distance(transform.position, playerController.transform.position);
 
         switch (state) {
@@ -78,12 +93,29 @@ public class MobController : AttackHandler
         mobAnimator.SetVelocity(agent.velocity.magnitude);
     }
 
+    public void OnPauseChange(bool paused) {
+        if (paused) {
+            mobAnimator.PauseAll();
+            if (agent.enabled) {
+                lastAgentVelocity = agent.velocity;
+                agent.velocity = Vector3.zero;
+            }
+
+        } else {
+            if (agent.enabled) agent.velocity = lastAgentVelocity;
+            mobAnimator.ResumeAll();
+        }
+
+        isPaused = paused;
+    }
+
     public override void OnAttack(AttackSource source) {
         if (state != EnemyState.die) {
             // take attack
             hitPoints--;
             uiController.OnHit();
             vfxController.PlayBlood(source.hitLocation, Quaternion.LookRotation(source.hitNormal, Vector3.up));
+            if (hitPoints > 0) characterAudio.OnPain();
         }
     }
 
@@ -112,12 +144,13 @@ public class MobController : AttackHandler
         if (canAttack) {
             canAttack = false;
 
-            agent.isStopped = true;
-
             // run attack logic
             StartCoroutine(routine_Attack());
             mobAnimator.TriggerAttack();
         }
+
+
+        if (agent.enabled) agent.isStopped = true;
 
         Vector3 targetLookRotation = new Vector3(playerController.transform.position.x, agent.transform.position.y, playerController.transform.position.z) - transform.position;
         Quaternion targetRotation = Quaternion.LookRotation(targetLookRotation, Vector3.up);
@@ -132,13 +165,15 @@ public class MobController : AttackHandler
 
         if (!didDie) {
             didDie = true;
-            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
             agent.enabled = false;
             mobCollider.enabled = false;
             uiController.HideUI();
             mobAnimator.SetIsDead(true);
-        }
+            characterAudio.OnDeath();
 
+            StartCoroutine(routine_SinkAndDestroy());
+        }
     }
 
     IEnumerator routine_Attack() {
@@ -158,12 +193,11 @@ public class MobController : AttackHandler
                 });
             } else {
                 vfxController.PlayMetalImpact(attackCastHits[0].point, Quaternion.LookRotation(attackCastHits[0].normal, Vector3.up));
+                characterAudio.OnMetalImpact();
             }
         }
 
         yield return new WaitForSeconds(attackPostTime);
-
-        agent.isStopped = false;
 
         if (state == EnemyState.attack) {
             state = EnemyState.aggro;
@@ -171,5 +205,16 @@ public class MobController : AttackHandler
 
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
+    }
+
+    IEnumerator routine_SinkAndDestroy() {
+        yield return new WaitForSeconds(sinkDelay);
+
+        while (transform.position.y > sinkYTarget) {
+            yield return new WaitForEndOfFrame();
+            transform.Translate(Vector3.down * sinkYSpeed * Time.deltaTime);
+        }
+
+        Destroy(gameObject);
     }
 }

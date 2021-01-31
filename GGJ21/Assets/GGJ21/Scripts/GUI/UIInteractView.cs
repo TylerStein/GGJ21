@@ -7,11 +7,11 @@ using TMPro;
 public class UIInteractView : MonoBehaviour
 {
     public TextMeshProUGUI text;
-    public Image textBackground;
+    public CanvasGroup group;
 
     public void ShowUI() {
         text.enabled = true;
-        textBackground.enabled = true;
+        group.alpha = 1f;
     }
 
     public void SetMessage(string message) {
@@ -20,6 +20,6 @@ public class UIInteractView : MonoBehaviour
 
     public void HideUI() {
         text.enabled = false;
-        textBackground.enabled = false;
+        group.alpha = 0f;
     }
 }

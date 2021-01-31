@@ -8,6 +8,7 @@ public class PlayerUIController : MonoBehaviour
     public PlayerController playerController;
     public UIHealthBar healthBar;
     public UIInteractView interactView;
+    public UIPauseMenu pauseMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -26,5 +27,10 @@ public class PlayerUIController : MonoBehaviour
 
     public void HideInteractMessage() {
         interactView.HideUI();
+    }
+
+    public void SetPaused(bool paused) {
+        if (paused) pauseMenu.ShowUI();
+        else pauseMenu.HideUI();
     }
 }
