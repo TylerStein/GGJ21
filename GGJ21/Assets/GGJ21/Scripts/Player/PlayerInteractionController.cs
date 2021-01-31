@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Player;
 
 public class InteractionHandlerEvent : UnityEvent<InteractionHandler> { }
 
 public class PlayerInteractionController : MonoBehaviour
 {
+    public PlayerController playerController;
+
     public CollisionEventSource interactiveCollisionEventSource;
     public List<InteractionHandler> handlers;
 
@@ -28,8 +31,8 @@ public class PlayerInteractionController : MonoBehaviour
 
     private void onEnter_Interactive(GameObject other) {
         InteractionHandler handler = other.GetComponent<InteractionHandler>();
-        if (handler != null) {
-             handler.GetDistableInteractionEvent().AddListener(onExit_Interactive);
+        if (handler != null && handler.CanInteract(playerController)) {
+             handler.GetDisableInteractionEvent().AddListener(onExit_Interactive);
             handlers.Add(handler);
             if (!activeInterctionHandler) {
                 activeInterctionHandler = handler;
@@ -41,7 +44,7 @@ public class PlayerInteractionController : MonoBehaviour
     private void onExit_Interactive(GameObject other) {
         InteractionHandler handler = other.GetComponent<InteractionHandler>();
         if (handler != null) {
-            handler.GetDistableInteractionEvent().RemoveListener(onExit_Interactive);
+            handler.GetDisableInteractionEvent().RemoveListener(onExit_Interactive);
             handlers.Remove(handler);
             if (activeInterctionHandler == handler) {
                 activeInterctionHandler = FirstHandler;

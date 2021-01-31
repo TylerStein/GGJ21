@@ -34,6 +34,9 @@ namespace Player
         private bool interact = false;
         public bool Interact { get { return interact; } }
 
+        private bool pauseDown = false;
+        public bool PauseDown { get { return pauseDown; } }
+
         private Vector3 cursorPosition = Vector3.zero;
         public Vector3 CursorPosition { get { return cursorPosition; } }
 
@@ -48,7 +51,7 @@ namespace Player
         [SerializeField] private string _secondaryButtonName = "Secondary";
         [SerializeField] private string _shiftButtonName = "Shift";
         [SerializeField] private string _interactButtonName = "Jump";
-
+        [SerializeField] private string _pauseButtonName = "Cancel";
         private void Update() {
             cursorPosition = Input.mousePosition;
             primaryDown = Input.GetButtonDown(_primaryButtonName);
@@ -62,6 +65,8 @@ namespace Player
 
             interactDown = Input.GetButtonDown(_interactButtonName);
             interact = Input.GetButton(_interactButtonName);
+
+            pauseDown = Input.GetButtonDown(_pauseButtonName);
 
 
             //RaycastHit hit;

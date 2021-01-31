@@ -51,3 +51,5 @@ MonoBehaviour:
   impactParticlesDuration: 1
   blockParticlesPrefab: {fileID: 1524668339008530, guid: 29c6f2331b0f66f47868e4b113e028f9, type: 3}
   blockParticlesDuration: 1
+  coinParticlesPrefab: {fileID: 1286577080098034, guid: a15ef3b4e08ad764d98f89e326ed6388, type: 3}
+  coinParticlesDuration: 1
