@@ -261,7 +261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 1710047736}
-  textBackground: {fileID: 1641126198}
+  group: {fileID: 0}
 --- !u!222 &1641126199
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3697,7 +3697,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2588352680263558931, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2588352680263558931, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3705,7 +3705,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2588352680263558931, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2588352680263558931, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
       propertyPath: m_AnchorMin.y
@@ -3713,11 +3713,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2588352680263558931, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 728
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2588352680263558931, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 80
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 2588352680263558931, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3753,7 +3753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2588352680263558931, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -20
+      value: -16
       objectReference: {fileID: 0}
     - target: {fileID: 2588352680263558931, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3770,22 +3770,6 @@ PrefabInstance:
     - target: {fileID: 5816770124536614161, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
       propertyPath: m_Name
       value: HealthBar
-      objectReference: {fileID: 0}
-    - target: {fileID: 6223216454610029318, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6223216454610029318, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6223216454610029318, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6223216454610029318, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: befcbe9840a2abf498f0c55492002bba, type: 3}
