@@ -143,7 +143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2145558923400716434}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2529882233e1d9a4c95f792c3efc77fa, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b37affbe17de3c4db6fa8d474b2e23d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 2145558924251025673}
@@ -221,7 +221,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2145558924251025676}
-  m_LocalRotation: {x: -0.035344608, y: 0.9619078, z: 0.22510837, w: 0.15103099}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.004, y: 0.004, z: 1}
   m_Children:

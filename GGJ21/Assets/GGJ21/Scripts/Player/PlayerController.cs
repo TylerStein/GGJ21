@@ -24,8 +24,9 @@ namespace Player
         public PlayerMovementController playerMovementController;
         public CharacterAnimator playerAnimator;
         public VFXController vfxController;
-        public PlayerColliderController colliderController;
+        public PlayerInteractionController interactionController;
         public PlayerUIController uiController;
+        public CollisionEventSource interactionEventSource;
         public Transform playerTransform { get => playerMovementController.transform; }
 
         public float attackDistance = 1f;
@@ -39,10 +40,10 @@ namespace Player
         public int maxHitPoints = 10;
         public int hitPoints = 10;
 
-        public bool canAttack = false;
-        public bool canBlock = false;
-        public bool canDodge = false;
-        public bool canInteract = false;
+        public bool canAttack = true;
+        public bool canBlock = true;
+        public bool canDodge = true;
+        public bool canInteract = true;
 
         public float moveSpeed = 2f;
 
@@ -61,8 +62,13 @@ namespace Player
 
         public RaycastHit[] attackCastHits;
 
-        public void Awake() {
+        public void Start() {
             hitPoints = maxHitPoints;
+            interactionController.interactionHandlerEvent.AddListener(changeActiveInteraction);
+        }
+
+        public void OnDestroy() {
+            interactionController.interactionHandlerEvent.RemoveListener(changeActiveInteraction);
         }
 
         public void Update() {
@@ -171,8 +177,6 @@ namespace Player
                 canInteract = false;
 
                 playerAnimator.SetIsBlocking(true);
-                //vfxController.PlayBlockImpact(playerMovementController.playerTransform.position + playerMovementController.playerTransform.forward * 0.75f + (Vector3.up * 1.5f), playerMovementController.playerTransform.rotation);
-                //cameraController.AddShake(shakeMagnitude, shakeDuration);
             }
 
             if (!cursorInput.Secondary) {
@@ -208,26 +212,24 @@ namespace Player
             if (hitPoints <= 0) state = PlayerState.die;
         }
 
+        public void changeActiveInteraction(InteractionHandler handler) {
+            if (handler != null) {
+                uiController.ShowInteractMessage(handler.GetMessage());
+            } else {
+                uiController.HideInteractMessage();
+            }
+        }
+
         public void updateState_Interact() {
             if (canInteract) {
-                canAttack = false;
-                canBlock = false;
-                canDodge = false;
                 canInteract = false;
 
-                GameObject interactiveObject = colliderController.FirstInteractionObject;
-                if (interactiveObject != null) {
-                    InteractionHandler handler = interactiveObject.GetComponent<InteractionHandler>();
-                    if (handler != null) {
-                        handler.OnInteract(this);
-                    }
+                InteractionHandler handler = interactionController.activeInterctionHandler;
+                if (handler != null) {
+                     handler.OnInteract(this);
                 }
             }
 
-
-            canAttack = true;
-            canBlock = true;
-            canDodge = true;
             canInteract = true;
 
             if (hitPoints <= 0) state = PlayerState.die;

@@ -23,12 +23,12 @@ public class CollisionEventSource : MonoBehaviour
     public GameObjectEvent exitEvent = new GameObjectEvent();
 
     private void OnTriggerEnter(Collider other) {
-        Debug.Log($"{gameObject.name} OnTriggerEnter with {other.gameObject.name}");
+        // Debug.Log($"{gameObject.name} OnTriggerEnter with {other.gameObject.name}");
         if (allowTag(other.tag)) enterEvent.Invoke(other.gameObject);
     }
 
     private void OnTriggerExit(Collider other) {
-        Debug.Log($"{gameObject.name} OnTriggerExit with {other.gameObject.name}");
+        // Debug.Log($"{gameObject.name} OnTriggerExit with {other.gameObject.name}");
         if (allowTag(other.tag)) exitEvent.Invoke(other.gameObject);
     }
 
