@@ -63,6 +63,8 @@ namespace Player
         public float shakeMagnitude = 0.5f;
         public float shakeDuration = 0.05f;
 
+        public float dieLevelChangeDelay = 2.0f;
+
         public RaycastHit[] attackCastHits;
 
         public bool isPaused;
@@ -224,6 +226,8 @@ namespace Player
         }
 
         public void changeActiveInteraction(InteractionHandler handler) {
+            if (didDie) return;
+            
             if (handler != null) {
                 uiController.ShowInteractMessage(handler.GetMessage());
             } else {
@@ -251,8 +255,10 @@ namespace Player
         public void updateState_Die() {
             if (!didDie) {
                 didDie = true;
+                uiController.HideInteractMessage();
                 playerAnimator.SetIsDead(true);
                 characterAudio.OnDeath();
+                StartCoroutine(routine_Die());
             }
         }
 
@@ -310,6 +316,12 @@ namespace Player
 
             yield return new WaitForSeconds(dodgeCooldown);
             canDodge = true;
+        }
+
+        public IEnumerator routine_Die() {
+            yield return new WaitForSeconds(dieLevelChangeDelay);
+
+            gameManager.LoseGame();
         }
     }
 }

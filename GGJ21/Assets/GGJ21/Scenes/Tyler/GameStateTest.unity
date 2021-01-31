@@ -212,8 +212,10 @@ MonoBehaviour:
   isMuted: 0
   netItemManager: {fileID: 301531300}
   isOnlineMode: 0
-  onlinePostGameSceneIndex: 2
-  offlinePostGameSceneIndex: 2
+  onlinePostGameWinSceneIndex: 2
+  offlinePostGameWinSceneIndex: 2
+  onlinePostGameLoseSceneIndex: 3
+  offlinePostGameLoseSceneIndex: 3
   mainMenuSceneIndex: 0
 --- !u!4 &301531302
 Transform:
@@ -1273,6 +1275,14 @@ PrefabInstance:
     - target: {fileID: 3990458934331502790, guid: 108bcab1a0c82a848969615d2c1f7df9, type: 3}
       propertyPath: m_SizeDelta.x
       value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 4066774466291611088, guid: 108bcab1a0c82a848969615d2c1f7df9, type: 3}
+      propertyPath: hitPoints
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4066774466291611088, guid: 108bcab1a0c82a848969615d2c1f7df9, type: 3}
+      propertyPath: maxHitPoints
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5240141574431682292, guid: 108bcab1a0c82a848969615d2c1f7df9, type: 3}
       propertyPath: m_AnchorMax.y

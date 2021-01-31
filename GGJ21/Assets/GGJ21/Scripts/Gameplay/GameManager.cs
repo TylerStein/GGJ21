@@ -17,8 +17,12 @@ public class GameManager : MonoBehaviour
     public NetItemManager netItemManager;
     public bool isOnlineMode = false;
 
-    public int onlinePostGameSceneIndex = 3;
-    public int offlinePostGameSceneIndex = 3;
+    public int onlinePostGameWinSceneIndex = 2;
+    public int offlinePostGameWinSceneIndex = 2;
+
+    public int onlinePostGameLoseSceneIndex = 3;
+    public int offlinePostGameLoseSceneIndex = 3;
+
     public int mainMenuSceneIndex = 0;
 
     // Start is called before the first frame update
@@ -53,6 +57,10 @@ public class GameManager : MonoBehaviour
     }
 
     public void CompleteGame() {
-        SceneManager.LoadScene(isOnlineMode ? onlinePostGameSceneIndex : offlinePostGameSceneIndex);
+        SceneManager.LoadScene(isOnlineMode ? onlinePostGameWinSceneIndex : offlinePostGameWinSceneIndex);
+    }
+
+    public void LoseGame() {
+        SceneManager.LoadScene(isOnlineMode ? onlinePostGameLoseSceneIndex : offlinePostGameLoseSceneIndex);
     }
 }

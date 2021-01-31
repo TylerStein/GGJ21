@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/GGJ21/Scenes/Tyler/GameStateTest.unity
     guid: f106ec8fe5402cc48beb959761fb6150
   - enabled: 1
-    path: Assets/GGJ21/Scenes/PostGame.unity
+    path: Assets/GGJ21/Scenes/PostGameWin.unity
     guid: e49d8d8a2a5513249ab377567ff945a4
+  - enabled: 1
+    path: Assets/GGJ21/Scenes/PostGameLose.unity
+    guid: bb2e6c53e8605b04aa159cebf714f01f
   m_configObjects: {}
