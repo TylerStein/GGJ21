@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/GGJ21/Scenes/Tyler/ConnectionTest.unity
-    guid: 3254869d274aa89488f88cace9b36b06
+    path: Assets/GGJ21/Scenes/MainMenu.unity
+    guid: 0d3780741ba3b0043bc99a71feedc59f
+  - enabled: 1
+    path: Assets/GGJ21/Scenes/Tyler/GameStateTest.unity
+    guid: f106ec8fe5402cc48beb959761fb6150
+  - enabled: 1
+    path: Assets/GGJ21/Scenes/PostGame.unity
+    guid: e49d8d8a2a5513249ab377567ff945a4
   m_configObjects: {}

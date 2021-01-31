@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class BoolEvent : UnityEvent<bool> { };
 
@@ -14,13 +15,17 @@ public class GameManager : MonoBehaviour
     public BoolEvent mutedEvent = new BoolEvent();
 
     public NetItemManager netItemManager;
-    public bool connectOnStart = false;
+    public bool isOnlineMode = false;
+
+    public int onlinePostGameSceneIndex = 3;
+    public int offlinePostGameSceneIndex = 3;
+    public int mainMenuSceneIndex = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         netItemManager.serverHealthEvent.AddListener(OnServerHealthEvent);
-        if (connectOnStart) netItemManager.GetServerHealth();
+        if (isOnlineMode) netItemManager.GetServerHealth();
     }
 
     private void OnDestroy() {
@@ -44,10 +49,10 @@ public class GameManager : MonoBehaviour
     }
 
     public void QuitToMain() {
-        // TODO: Quit to main
+        SceneManager.LoadScene(mainMenuSceneIndex);
     }
 
     public void CompleteGame() {
-        // TODO: Show game win screen or something
+        SceneManager.LoadScene(isOnlineMode ? onlinePostGameSceneIndex : offlinePostGameSceneIndex);
     }
 }

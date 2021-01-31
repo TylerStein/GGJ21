@@ -118,6 +118,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65
   attackOrigin: {fileID: 2145558923569979444}
+  isPaused: 0
+  lastAgentVelocity: {x: 0, y: 0, z: 0}
+  sinkDelay: 2.5
+  sinkYTarget: -5
+  sinkYSpeed: 1
 --- !u!114 &2145558923400716435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,6 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ef6b848cbfe754cbb4688ab02c4874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   source: {fileID: 17274167}
   death: {fileID: 8300000, guid: 3e8e08dacefb3b44ea6fb314543fe2ec, type: 3}
   pain: {fileID: 8300000, guid: b1f0fd1fc92f76f44a0d94ca0b1e4da2, type: 3}
@@ -339,7 +345,7 @@ RectTransform:
   m_GameObject: {fileID: 2145558924251025676}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.004, y: 0.004, z: 1}
+  m_LocalScale: {x: 0.008, y: 0.008, z: 1}
   m_Children:
   - {fileID: 4480276192607010828}
   m_Father: {fileID: 2145558923400716430}
