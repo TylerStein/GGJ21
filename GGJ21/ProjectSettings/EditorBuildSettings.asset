@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/GGJ21/Scenes/MainMenu.unity
     guid: 0d3780741ba3b0043bc99a71feedc59f
   - enabled: 1
-    path: Assets/GGJ21/Scenes/Tyler/GameStateTest.unity
-    guid: f106ec8fe5402cc48beb959761fb6150
+    path: Assets/GGJ21/Scenes/world.unity
+    guid: ccbe0cc114fc99a4dafadf7460738ba9
   - enabled: 1
     path: Assets/GGJ21/Scenes/PostGameWin.unity
     guid: e49d8d8a2a5513249ab377567ff945a4
